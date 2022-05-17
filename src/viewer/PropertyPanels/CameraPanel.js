@@ -1,6 +1,6 @@
 
 import {Utils} from "../../utils.js";
-
+import $ from 'jquery';
 export class CameraPanel{
 	constructor(viewer, propertiesPanel){
 		this.viewer = viewer;

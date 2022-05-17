@@ -1,6 +1,6 @@
 
 import {Utils} from "../../utils.js";
-
+import $ from 'jquery';
 export class CameraAnimationPanel{
 	constructor(viewer, propertiesPanel, animation){
 		this.viewer = viewer;
@@ -36,7 +36,7 @@ export class CameraAnimationPanel{
 			min: 0,
 			max: 1,
 			step: 0.001,
-			slide: (event, ui) => { 
+			slide: (event, ui) => {
 				animation.set(ui.value);
 			}
 		});
@@ -148,7 +148,7 @@ export class CameraAnimationPanel{
 			addNewKeyframeItem(index);
 
 			for(const cp of animation.controlPoints){
-				
+
 				addKeyframeItem(index);
 				index++;
 				addNewKeyframeItem(index);
@@ -170,6 +170,6 @@ export class CameraAnimationPanel{
 	}
 
 	update(){
-		
+
 	}
 };

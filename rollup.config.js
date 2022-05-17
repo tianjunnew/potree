@@ -1,13 +1,13 @@
 export default [
 	{
 		input: 'src/Potree.js',
-		treeshake: false,
 		output: {
 			file: 'build/potree/potree.js',
-			format: 'umd',
+			format: 'es',
 			name: 'Potree',
 			sourcemap: true,
-		}
+		},
+		external: ['jquery']
 	},{
 		input: 'src/workers/BinaryDecoderWorker.js',
 		output: {

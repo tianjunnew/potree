@@ -1,6 +1,6 @@
 
 import {Utils} from "../../utils.js";
-
+import $ from 'jquery';
 export class AnnotationPanel{
 	constructor(viewer, propertiesPanel, annotation){
 		this.viewer = viewer;
@@ -37,9 +37,9 @@ export class AnnotationPanel{
 
 				<div class="heading">Description</div>
 				<div id="annotation_description" contenteditable="true">
-					A longer description of this annotation. 
+					A longer description of this annotation.
 						Can be multiple lines long. TODO: the user should be able
-						to modify title and description. 
+						to modify title and description.
 				</div>
 
 			</div>

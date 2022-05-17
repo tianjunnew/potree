@@ -1,7 +1,7 @@
 
 import * as THREE from "../../../libs/three.js/build/three.module.js";
 import {MeasurePanel} from "./MeasurePanel.js";
-
+import $ from 'jquery';
 export class ProfilePanel extends MeasurePanel{
 	constructor(viewer, measurement, propertiesPanel){
 		super(viewer, measurement, propertiesPanel);
@@ -118,30 +118,30 @@ export class ProfilePanel extends MeasurePanel{
 		{
 			let segments = profile.getSegments();
 			let width = profile.width;
-			
+
 			for(let segment of segments){
 				let start = segment.start.clone().multiply(new THREE.Vector3(1, 1, 0));
 				let end = segment.end.clone().multiply(new THREE.Vector3(1, 1, 0));
 				let center = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
-				
+
 				let startEndDir = new THREE.Vector3().subVectors(end, start).normalize();
 				let endStartDir = new THREE.Vector3().subVectors(start, end).normalize();
 				let upDir = new THREE.Vector3(0, 0, 1);
 				let rightDir = new THREE.Vector3().crossVectors(startEndDir, upDir);
 				let leftDir = new THREE.Vector3().crossVectors(endStartDir, upDir);
-				
+
 				console.log(leftDir);
-				
+
 				let right = rightDir.clone().multiplyScalar(width * 0.5).add(center);
 				let left = leftDir.clone().multiplyScalar(width * 0.5).add(center);
-				
+
 				let planes = [
 					new THREE.Plane().setFromNormalAndCoplanarPoint(startEndDir, start),
 					new THREE.Plane().setFromNormalAndCoplanarPoint(endStartDir, end),
 					new THREE.Plane().setFromNormalAndCoplanarPoint(leftDir, right),
 					new THREE.Plane().setFromNormalAndCoplanarPoint(rightDir, left),
 				];
-				
+
 				let planeQueryParts = [];
 				for(let plane of planes){
 					let part = [plane.normal.toArray(), plane.constant].join(",");
@@ -192,7 +192,7 @@ export class ProfilePanel extends MeasurePanel{
 		let handle = null;
 		{ // START FILTER
 			let url = `${viewer.server}/create_regions_filter?pointclouds=[${pointcloudsArg}]&regions=[${regionsArg}]`;
-			
+
 			//console.log(url);
 
 			info("estimating results ...");

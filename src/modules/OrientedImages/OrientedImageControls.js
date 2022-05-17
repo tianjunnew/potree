@@ -1,13 +1,14 @@
 
 import * as THREE from "../../../libs/three.js/build/three.module.js";
 import {EventDispatcher} from "../../EventDispatcher.js";
+import $ from 'jquery';
 
- 
+
 export class OrientedImageControls extends EventDispatcher{
-	
+
 	constructor(viewer){
 		super();
-		
+
 		this.viewer = viewer;
 		this.renderer = viewer.renderer;
 
@@ -175,10 +176,10 @@ export class OrientedImageControls extends EventDispatcher{
 			(1 - shu) * this.shear[0] + shu * shx,
 			(1 - shu) * this.shear[1] + shu * shy,
 		];
-		
+
 		this.shear = newShear;
 		this.viewer.setFOV(newFov);
-		
+
 		const {originalCam, shearCam} = this;
 
 		originalCam.fov = newFov;

@@ -1,4 +1,4 @@
-
+import $ from 'jquery';
 function addCommas(nStr){
 	nStr += '';
 	let x = nStr.split('.');
@@ -18,7 +18,7 @@ function format(value){
 export class HierarchicalSlider{
 
 	constructor(params = {}){
-		
+
 		this.element = document.createElement("div");
 
 		this.labels = [];
@@ -59,7 +59,7 @@ export class HierarchicalSlider{
 				max: childRange[1],
 			});
 		}
-		
+
 		this.updateLabels();
 	}
 
@@ -88,15 +88,15 @@ export class HierarchicalSlider{
 			let parentSlider = this.sliders[this.sliders.length - 1];
 			[min, max] = $(parentSlider).slider("option", "values");
 		}
-		
+
 		$(slider).slider({
-			range: true, 
-			min: min, 
+			range: true,
+			min: min,
 			max: max,
 			step: this.step,
 			values: [min, max],
 			slide: (event, ui) => {
-				
+
 				// set all descendants to same range
 				let levels = this.sliders.length;
 				for(let i = level + 1; i < levels; i++){
@@ -114,7 +114,7 @@ export class HierarchicalSlider{
 					let values = [...ui.values];
 
 					this.slide({
-						target: this, 
+						target: this,
 						range: this.range,
 						values: values,
 					});

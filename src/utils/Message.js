@@ -1,4 +1,4 @@
-
+import $ from 'jquery';
 export class Message{
 
 	constructor(content){

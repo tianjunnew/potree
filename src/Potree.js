@@ -85,6 +85,7 @@ import {POCLoader} from "./loader/POCLoader.js";
 import {EptLoader} from "./loader/EptLoader.js";
 import {PointCloudOctree} from "./PointCloudOctree.js";
 import {WorkerPool} from "./WorkerPool.js";
+import $ from 'jquery';
 
 export const workerPool = new WorkerPool();
 
@@ -294,4 +295,4 @@ export function loadPointCloud(path, name, callback){
 
 		}
 	});
-})(jQuery);
+})($);

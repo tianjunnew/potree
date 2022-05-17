@@ -22,7 +22,7 @@ import {ProfilePanel} from "./ProfilePanel.js";
 import {CameraPanel} from "./CameraPanel.js";
 import {AnnotationPanel} from "./AnnotationPanel.js";
 import { CameraAnimationPanel } from "./CameraAnimationPanel.js";
-
+import $ from 'jquery';
 export class PropertiesPanel{
 
 	constructor(container, viewer){
@@ -43,7 +43,7 @@ export class PropertiesPanel{
 		}
 
 		this.object = object;
-		
+
 		for(let task of this.cleanupTasks){
 			task();
 		}
@@ -61,7 +61,7 @@ export class PropertiesPanel{
 		}else if(object instanceof CameraAnimation){
 			this.setCameraAnimation(object);
 		}
-		
+
 	}
 
 	//
@@ -114,7 +114,7 @@ export class PropertiesPanel{
 				<li id="materials_backface_container">
 				<label><input id="set_backface_culling" type="checkbox" /><span data-i18n="appearance.backface_culling"></span></label>
 				</li>
-				
+
 				<!-- OPACITY -->
 				<li><span data-i18n="appearance.point_opacity"></span>:<span id="lblOpacity"></span><div id="sldOpacity"></div></li>
 
@@ -160,7 +160,7 @@ export class PropertiesPanel{
 					<li>Brightness: <span id="lblExtraBrightness"></span> <div id="sldExtraBrightness"></div></li>
 					<li>Contrast: <span id="lblExtraContrast"></span> <div id="sldExtraContrast"></div></li>
 				</div>
-				
+
 				<div id="materials.matcap_container">
 					<div class="divider">
 						<span>MATCAP</span>
@@ -227,7 +227,7 @@ export class PropertiesPanel{
 					</div>
 
 				</div>
-				
+
 				<div id="materials.index_container">
 					<div class="divider">
 						<span>Indices</span>
@@ -259,7 +259,7 @@ export class PropertiesPanel{
 				sldPointSize.slider({value: material.size});
 			};
 			this.addVolatileListener(material, "point_size_changed", update);
-			
+
 			update();
 		}
 
@@ -280,7 +280,7 @@ export class PropertiesPanel{
 				sldMinPointSize.slider({value: material.minSize});
 			};
 			this.addVolatileListener(material, "point_size_changed", update);
-			
+
 			update();
 		}
 
@@ -320,7 +320,7 @@ export class PropertiesPanel{
 		}
 
 		{ // BACKFACE CULLING
-			
+
 			let opt = panel.find(`#set_backface_culling`);
 			opt.click(() => {
 				material.backfaceCulling = opt.prop("checked");
@@ -361,7 +361,7 @@ export class PropertiesPanel{
 				min: 0,
 				max: 1,
 				step: 0.001,
-				slide: function (event, ui) { 
+				slide: function (event, ui) {
 					material.opacity = ui.value;
 				}
 			});
@@ -453,8 +453,8 @@ export class PropertiesPanel{
 					if(minMaxAreNumbers){
 						panel.find('#sldExtraRange').slider({
 							range: true,
-							min: min, 
-							max: max, 
+							min: min,
+							max: max,
 							step: 0.01,
 							values: selectedRange,
 							slide: (event, ui) => {
@@ -516,11 +516,11 @@ export class PropertiesPanel{
 				} else if (selectedValue === "gps-time" ){
 					blockGps.css('display', 'block');
 				} else if(selectedValue === "number of returns"){
-					
+
 				} else if(selectedValue === "return number"){
-					
+
 				} else if(["source id", "point source id"].includes(selectedValue)){
-					
+
 				} else{
 					blockExtra.css('display', 'block');
 				}
@@ -564,32 +564,32 @@ export class PropertiesPanel{
 
 		{
 			let matcaps = [
-				{name: "Normals", icon: `${Potree.resourcePath}/icons/matcap/check_normal+y.jpg`}, 
-				{name: "Basic 1", icon: `${Potree.resourcePath}/icons/matcap/basic_1.jpg`}, 
-				{name: "Basic 2", icon: `${Potree.resourcePath}/icons/matcap/basic_2.jpg`}, 
-				{name: "Basic Dark", icon: `${Potree.resourcePath}/icons/matcap/basic_dark.jpg`}, 
-				{name: "Basic Side", icon: `${Potree.resourcePath}/icons/matcap/basic_side.jpg`}, 
-				{name: "Ceramic Dark", icon: `${Potree.resourcePath}/icons/matcap/ceramic_dark.jpg`}, 
-				{name: "Ceramic Lightbulb", icon: `${Potree.resourcePath}/icons/matcap/ceramic_lightbulb.jpg`}, 
-				{name: "Clay Brown", icon: `${Potree.resourcePath}/icons/matcap/clay_brown.jpg`}, 
-				{name: "Clay Muddy", icon: `${Potree.resourcePath}/icons/matcap/clay_muddy.jpg`}, 
-				{name: "Clay Studio", icon: `${Potree.resourcePath}/icons/matcap/clay_studio.jpg`}, 
-				{name: "Resin", icon: `${Potree.resourcePath}/icons/matcap/resin.jpg`}, 
-				{name: "Skin", icon: `${Potree.resourcePath}/icons/matcap/skin.jpg`}, 
-				{name: "Jade", icon: `${Potree.resourcePath}/icons/matcap/jade.jpg`}, 
-				{name: "Metal_ Anisotropic", icon: `${Potree.resourcePath}/icons/matcap/metal_anisotropic.jpg`}, 
-				{name: "Metal Carpaint", icon: `${Potree.resourcePath}/icons/matcap/metal_carpaint.jpg`}, 
-				{name: "Metal Lead", icon: `${Potree.resourcePath}/icons/matcap/metal_lead.jpg`}, 
-				{name: "Metal Shiny", icon: `${Potree.resourcePath}/icons/matcap/metal_shiny.jpg`}, 
-				{name: "Pearl", icon: `${Potree.resourcePath}/icons/matcap/pearl.jpg`}, 
+				{name: "Normals", icon: `${Potree.resourcePath}/icons/matcap/check_normal+y.jpg`},
+				{name: "Basic 1", icon: `${Potree.resourcePath}/icons/matcap/basic_1.jpg`},
+				{name: "Basic 2", icon: `${Potree.resourcePath}/icons/matcap/basic_2.jpg`},
+				{name: "Basic Dark", icon: `${Potree.resourcePath}/icons/matcap/basic_dark.jpg`},
+				{name: "Basic Side", icon: `${Potree.resourcePath}/icons/matcap/basic_side.jpg`},
+				{name: "Ceramic Dark", icon: `${Potree.resourcePath}/icons/matcap/ceramic_dark.jpg`},
+				{name: "Ceramic Lightbulb", icon: `${Potree.resourcePath}/icons/matcap/ceramic_lightbulb.jpg`},
+				{name: "Clay Brown", icon: `${Potree.resourcePath}/icons/matcap/clay_brown.jpg`},
+				{name: "Clay Muddy", icon: `${Potree.resourcePath}/icons/matcap/clay_muddy.jpg`},
+				{name: "Clay Studio", icon: `${Potree.resourcePath}/icons/matcap/clay_studio.jpg`},
+				{name: "Resin", icon: `${Potree.resourcePath}/icons/matcap/resin.jpg`},
+				{name: "Skin", icon: `${Potree.resourcePath}/icons/matcap/skin.jpg`},
+				{name: "Jade", icon: `${Potree.resourcePath}/icons/matcap/jade.jpg`},
+				{name: "Metal_ Anisotropic", icon: `${Potree.resourcePath}/icons/matcap/metal_anisotropic.jpg`},
+				{name: "Metal Carpaint", icon: `${Potree.resourcePath}/icons/matcap/metal_carpaint.jpg`},
+				{name: "Metal Lead", icon: `${Potree.resourcePath}/icons/matcap/metal_lead.jpg`},
+				{name: "Metal Shiny", icon: `${Potree.resourcePath}/icons/matcap/metal_shiny.jpg`},
+				{name: "Pearl", icon: `${Potree.resourcePath}/icons/matcap/pearl.jpg`},
 				{name: "Toon", icon: `${Potree.resourcePath}/icons/matcap/toon.jpg`},
-				{name: "Check Rim Light", icon: `${Potree.resourcePath}/icons/matcap/check_rim_light.jpg`}, 
-				{name: "Check Rim Dark", icon: `${Potree.resourcePath}/icons/matcap/check_rim_dark.jpg`}, 
-				{name: "Contours 1", icon: `${Potree.resourcePath}/icons/matcap/contours_1.jpg`}, 
-				{name: "Contours 2", icon: `${Potree.resourcePath}/icons/matcap/contours_2.jpg`}, 
-				{name: "Contours 3", icon: `${Potree.resourcePath}/icons/matcap/contours_3.jpg`}, 
-				{name: "Reflection Check Horizontal", icon: `${Potree.resourcePath}/icons/matcap/reflection_check_horizontal.jpg`}, 
-				{name: "Reflection Check Vertical", icon: `${Potree.resourcePath}/icons/matcap/reflection_check_vertical.jpg`}, 
+				{name: "Check Rim Light", icon: `${Potree.resourcePath}/icons/matcap/check_rim_light.jpg`},
+				{name: "Check Rim Dark", icon: `${Potree.resourcePath}/icons/matcap/check_rim_dark.jpg`},
+				{name: "Contours 1", icon: `${Potree.resourcePath}/icons/matcap/contours_1.jpg`},
+				{name: "Contours 2", icon: `${Potree.resourcePath}/icons/matcap/contours_2.jpg`},
+				{name: "Contours 3", icon: `${Potree.resourcePath}/icons/matcap/contours_3.jpg`},
+				{name: "Reflection Check Horizontal", icon: `${Potree.resourcePath}/icons/matcap/reflection_check_horizontal.jpg`},
+				{name: "Reflection Check Vertical", icon: `${Potree.resourcePath}/icons/matcap/reflection_check_vertical.jpg`},
 			];
 
 			let elMatcapContainer = panel.find("#matcap_scheme_selection");
@@ -733,7 +733,7 @@ export class PropertiesPanel{
 			});
 
 			let updateHeightRange = function () {
-				
+
 
 				let aPosition = pointcloud.getAttribute("position");
 
@@ -774,7 +774,7 @@ export class PropertiesPanel{
 				if(attribute == null){
 					return;
 				}
-				
+
 				let range = material.getRange(attributeName);
 
 				if(range == null){
@@ -864,7 +864,7 @@ export class PropertiesPanel{
 
 	}
 
-	
+
 
 	setMeasurement(object){
 

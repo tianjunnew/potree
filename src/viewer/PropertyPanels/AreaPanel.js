@@ -1,7 +1,7 @@
 
 
 import {MeasurePanel} from "./MeasurePanel.js";
-
+import $ from 'jquery';
 export class AreaPanel extends MeasurePanel{
 	constructor(viewer, measurement, propertiesPanel){
 		super(viewer, measurement, propertiesPanel);

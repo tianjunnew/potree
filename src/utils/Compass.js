@@ -1,6 +1,6 @@
 
 import * as THREE from "../../libs/three.js/build/three.module.js";
-
+import $ from 'jquery';
 import {Utils} from "../utils.js";
 
 export class Compass{
@@ -23,7 +23,7 @@ export class Compass{
 
 			const projection = viewer.getProjection();
 			const azimuth = Utils.computeAzimuth(p1, p2, projection);
-			
+
 			this.dom.css("transform", `rotateZ(${-azimuth}rad)`);
 		});
 

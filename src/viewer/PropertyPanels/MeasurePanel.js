@@ -1,7 +1,7 @@
 
 
 import {Utils} from "../../utils.js";
-
+import $ from 'jquery';
 export class MeasurePanel{
 
 	constructor(viewer, measurement, propertiesPanel){
@@ -62,10 +62,10 @@ export class MeasurePanel{
 		let elTable = $('<table class="measurement_value_table"></table>');
 
 		let point = this.measurement.points[0];
-		
+
 		for(let attributeName of Object.keys(point)){
 			if(attributeName === "position"){
-			
+
 			}else if(attributeName === "rgba"){
 				let color = point.rgba;
 				let text = color.join(', ');

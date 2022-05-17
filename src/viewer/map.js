@@ -1,6 +1,6 @@
 
 import * as THREE from "../../libs/three.js/build/three.module.js";
-
+import $ from 'jquery';
 // http://epsg.io/
 proj4.defs([
 	['UTM10N', '+proj=utm +zone=10 +ellps=GRS80 +datum=NAD83 +units=m +no_defs'],
@@ -492,7 +492,7 @@ export class MapView{
 				})
 			})
 		});
-		
+
 		let layer = new ol.layer.Vector({
 			source: new ol.source.Vector({}),
 			style: style,
@@ -691,7 +691,7 @@ export class MapView{
 			constrainResolution: false
 		});
 
-		if (pointcloud.pcoGeometry.type == 'ept'){ 
+		if (pointcloud.pcoGeometry.type == 'ept'){
 			return;
 		}
 
@@ -700,7 +700,7 @@ export class MapView{
 
 		fetch(url).then(async (response) => {
 			let data = await response.json();
-		
+
 			let sources = data.sources;
 
 			for (let i = 0; i < sources.length; i++) {
@@ -740,7 +740,7 @@ export class MapView{
 				this.sourcesLabelLayer.getSource().addFeature(feature);
 			}
 		}).catch(() => {
-			
+
 		});
 
 	}

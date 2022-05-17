@@ -2,7 +2,7 @@
 
 import {MeasurePanel} from "./MeasurePanel.js";
 import {Profile} from "./../../utils/Profile.js";
-
+import $ from 'jquery';
 export class DistancePanel extends MeasurePanel{
 	constructor(viewer, measurement, propertiesPanel){
 		super(viewer, measurement, propertiesPanel);
@@ -29,7 +29,7 @@ export class DistancePanel extends MeasurePanel{
 		this.elRemove.click( () => {
 			this.viewer.scene.removeMeasurement(measurement);
 		});
-		
+
 		this.elMakeProfile = this.elContent.find("input[name=make_profile]");
 		this.elMakeProfile.click( () => {
 			//measurement.points;

@@ -1,7 +1,7 @@
 
 
 import {MeasurePanel} from "./MeasurePanel.js";
-
+import $ from 'jquery';
 export class CirclePanel extends MeasurePanel{
 	constructor(viewer, measurement, propertiesPanel){
 		super(viewer, measurement, propertiesPanel);
@@ -43,7 +43,7 @@ export class CirclePanel extends MeasurePanel{
 
 		if(this.measurement.points.length !== 3){
 			elInfos.empty();
-			
+
 			return;
 		}
 
@@ -54,19 +54,19 @@ export class CirclePanel extends MeasurePanel{
 		const center = Potree.Utils.computeCircleCenter(A, B, C);
 		const radius = center.distanceTo(A);
 		const circumference = 2 * Math.PI * radius;
-		
+
 		const format = (number) => {
 			return Potree.Utils.addCommas(number.toFixed(3));
 		};
 
-		
+
 		const txtCenter = `${format(center.x)} ${format(center.y)} ${format(center.z)}`;
 		const txtRadius = format(radius);
 		const txtCircumference = format(circumference);
 
 		const thStyle = `style="text-align: left"`;
 		const tdStyle = `style="width: 100%; padding: 5px;"`;
-		
+
 		elInfos.html(`
 			<tr>
 				<th ${thStyle}>Center: </th>
