@@ -1,6 +1,7 @@
 import {PointCloudTreeNode} from "./PointCloudTree.js";
 import {PointAttributes, PointAttribute, PointAttributeTypes} from "./loader/PointAttributes.js";
 import * as THREE from "../libs/three.js/build/three.module.js";
+import proj4 from 'proj4';
 
 class U {
 	static toVector3(v, offset) {
@@ -64,7 +65,7 @@ export class PointCloudEptGeometry {
 			else this.fallbackProjection = info.srs.wkt;
 		}
 
-		{ 
+		{
 			// TODO [mschuetz]: named projections that proj4 can't handle seem to cause problems.
 			// remove them for now
 
@@ -74,11 +75,11 @@ export class PointCloudEptGeometry {
 				this.projection = null;
 			}
 
-		
+
 
 		}
 
-		
+
 		{
 			const attributes = new PointAttributes();
 

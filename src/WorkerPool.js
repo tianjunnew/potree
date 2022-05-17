@@ -1,4 +1,4 @@
-
+import {Utils} from './utils';
 export class WorkerPool{
 	constructor(){
 		this.workers = {};
@@ -10,7 +10,7 @@ export class WorkerPool{
 		}
 
 		if (this.workers[url].length === 0){
-			let worker = new Worker(url);
+			let worker = Utils.createWorker(`importScripts('${url}')`);
 			this.workers[url].push(worker);
 		}
 

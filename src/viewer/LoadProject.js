@@ -5,6 +5,7 @@ import {Measure} from "../utils/Measure.js";
 import {CameraAnimation} from "../modules/CameraAnimation/CameraAnimation.js";
 import {Utils} from "../utils.js";
 import {PointSizeType} from "../defines.js";
+import proj4 from 'proj4';
 
 function loadPointCloud(viewer, data){
 
@@ -196,7 +197,7 @@ function loadGeopackage(viewer, geopackage){
 	Potree.GeoPackageLoader.loadUrl(path, params).then(data => {
 		viewer.scene.addGeopackage(data);
 	});
-	
+
 
 }
 
@@ -283,7 +284,7 @@ function loadAnnotations(viewer, data){
 }
 
 function loadProfile(viewer, data){
-	
+
 	const {name, points} = data;
 
 	const duplicate = viewer.scene.profiles.find(profile => profile.uuid === data.uuid);
@@ -300,7 +301,7 @@ function loadProfile(viewer, data){
 	for(const point of points){
 		profile.addMarker(new THREE.Vector3(...point));
 	}
-	
+
 	viewer.scene.addProfile(profile);
 }
 

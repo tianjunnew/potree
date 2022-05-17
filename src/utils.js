@@ -6,6 +6,7 @@ import {Profile} from "./utils/Profile.js";
 import {Measure} from "./utils/Measure.js";
 import {PolygonClipVolume} from "./utils/PolygonClipVolume.js";
 import TWEEN from "../libs/tween/Tween.js";
+import proj4 from 'proj4';
 
 export class Utils {
 	static async loadShapefileFeatures (file, callback) {
