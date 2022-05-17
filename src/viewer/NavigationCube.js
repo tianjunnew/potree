@@ -26,28 +26,28 @@ export class NavigationCube extends THREE.Object3D {
 
 		let planeGeometry = new THREE.PlaneGeometry(1, 1);
 
-		this.front = new THREE.Mesh(planeGeometry, createPlaneMaterial('F.png'));
+		this.front = new THREE.Mesh(planeGeometry, createPlaneMaterial('S.png'));
 		this.front.position.y = -0.5;
 		this.front.rotation.x = Math.PI / 2.0;
 		this.front.updateMatrixWorld();
 		this.front.name = "F";
 		this.add(this.front);
 
-		this.back = new THREE.Mesh(planeGeometry, createPlaneMaterial('B.png'));
+		this.back = new THREE.Mesh(planeGeometry, createPlaneMaterial('N.png'));
 		this.back.position.y = 0.5;
 		this.back.rotation.x = Math.PI / 2.0;
 		this.back.updateMatrixWorld();
 		this.back.name = "B";
 		this.add(this.back);
 
-		this.left = new THREE.Mesh(planeGeometry, createPlaneMaterial('L.png'));
+		this.left = new THREE.Mesh(planeGeometry, createPlaneMaterial('W.png'));
 		this.left.position.x = -0.5;
 		this.left.rotation.y = Math.PI / 2.0;
 		this.left.updateMatrixWorld();
 		this.left.name = "L";
 		this.add(this.left);
 
-		this.right = new THREE.Mesh(planeGeometry, createPlaneMaterial('R.png'));
+		this.right = new THREE.Mesh(planeGeometry, createPlaneMaterial('E.png'));
 		this.right.position.x = 0.5;
 		this.right.rotation.y = Math.PI / 2.0;
 		this.right.updateMatrixWorld();
@@ -60,13 +60,13 @@ export class NavigationCube extends THREE.Object3D {
 		this.bottom.name = "D";
 		this.add(this.bottom);
 
-		this.top = new THREE.Mesh(planeGeometry, createPlaneMaterial('U.png'));
+		this.top = new THREE.Mesh(planeGeometry, createPlaneMaterial('compass.png'));
 		this.top.position.z = 0.5;
 		this.top.updateMatrixWorld();
 		this.top.name = "U";
 		this.add(this.top);
 
-		this.width = 150; // in px
+		this.width = 200; // in px
 
 		this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
 		this.camera.position.copy(new THREE.Vector3(0, 0, 0));
