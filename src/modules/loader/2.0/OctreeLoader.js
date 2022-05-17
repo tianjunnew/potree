@@ -7,8 +7,11 @@ import {OctreeGeometry, OctreeGeometryNode} from "./OctreeGeometry.js";
 
 export class NodeLoader{
 
-	constructor(url){
-		this.url = url;
+	constructor(metadataUrl, hierarchyUrl='', octreeUrl=''){
+		// if not hierarchyUrl/octreeUrl is given, will use the relative path of metadataUrl to find them
+		this.url = metadataUrl;
+		this.hierarchyUrl = hierarchyUrl ? hierarchyUrl : `${this.url}/../hierarchy.bin`
+		this.octreeUrl = octreeUrl ? octreeUrl : `${this.url}/../octree.bin`
 	}
 
 	async load(node){
@@ -35,7 +38,7 @@ export class NodeLoader{
 			let {byteOffset, byteSize} = node;
 
 
-			let urlOctree = `${this.url}/../octree.bin`;
+			let urlOctree = this.octreeUrl;
 
 			let first = byteOffset;
 			let last = byteOffset + byteSize - 1n;
@@ -238,7 +241,7 @@ export class NodeLoader{
 	async loadHierarchy(node){
 
 		let {hierarchyByteOffset, hierarchyByteSize} = node;
-		let hierarchyPath = `${this.url}/../hierarchy.bin`;
+		let hierarchyPath = this.hierarchyUrl;
 		
 		let first = hierarchyByteOffset;
 		let last = first + hierarchyByteSize - 1n;
@@ -377,14 +380,21 @@ export class OctreeLoader{
 		return attributes;
 	}
 
-	static async load(url){
+	static async load(data){
+		// mrm data:
+		// { name: xxx, addr: xxx, metadataUrl: xxx, hierarchyUrl: xxx, octreeUrl: xxx, ...}
+
+		// pm data:
+		// { name: xxx, addr: xxx, ...}
+
+		let url = data.metadataUrl ? data.metadataUrl : data.addr
 
 		let response = await fetch(url);
 		let metadata = await response.json();
 
 		let attributes = OctreeLoader.parseAttributes(metadata.attributes);
 
-		let loader = new NodeLoader(url);
+		let loader = data.hasOwnProperty('metadataUrl') ? new NodeLoader(data.metadataUrl, data.hierarchyUrl, data.octreeUrl) : new NodeLoader(url)
 		loader.metadata = metadata;
 		loader.attributes = attributes;
 		loader.scale = metadata.scale;
@@ -402,15 +412,21 @@ export class OctreeLoader{
 		let max = new THREE.Vector3(...metadata.boundingBox.max);
 		let boundingBox = new THREE.Box3(min, max);
 
+		let tightMin = new THREE.Vector3(...metadata.attributes[0].min)
+		let tightMax = new THREE.Vector3(...metadata.attributes[0].max)
+		let tightBoundingBox = new THREE.Box3(tightMin,tightMax)
+
 		let offset = min.clone();
 		boundingBox.min.sub(offset);
 		boundingBox.max.sub(offset);
+		tightBoundingBox.min.sub(offset)
+		tightBoundingBox.max.sub(offset)
 
 		octree.projection = metadata.projection;
 		octree.boundingBox = boundingBox;
-		octree.tightBoundingBox = boundingBox.clone();
+		octree.tightBoundingBox = tightBoundingBox;
 		octree.boundingSphere = boundingBox.getBoundingSphere(new THREE.Sphere());
-		octree.tightBoundingSphere = boundingBox.getBoundingSphere(new THREE.Sphere());
+		octree.tightBoundingSphere = tightBoundingBox.getBoundingSphere(new THREE.Sphere());
 		octree.offset = offset;
 		octree.pointAttributes = OctreeLoader.parseAttributes(metadata.attributes);
 		octree.loader = loader;
