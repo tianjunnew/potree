@@ -28,10 +28,8 @@ import {OrbitControls} from "../navigation/OrbitControls.js";
 import {FirstPersonControls} from "../navigation/FirstPersonControls.js";
 import {EarthControls} from "../navigation/EarthControls.js";
 import {DeviceOrientationControls} from "../navigation/DeviceOrientationControls.js";
-import {VRControls} from "../navigation/VRControls.js";
 import { EventDispatcher } from "../EventDispatcher.js";
 import { ClassificationScheme } from "../materials/ClassificationScheme.js";
-import { VRButton } from '../../libs/three.js/extra/VRButton.js';
 
 import JSON5 from "../../libs/json5-2.1.3/json5.mjs";
 
@@ -44,8 +42,6 @@ export class Viewer extends EventDispatcher{
 		this.renderArea = domElement;
 		this.guiLoaded = false;
 		this.guiLoadTasks = [];
-
-		this.onVrListeners = [];
 
 		this.messages = [];
 		this.elMessages = $(`
@@ -85,35 +81,6 @@ export class Viewer extends EventDispatcher{
 					<div id="potree_quick_buttons" class="quick_buttons_container" style="">
 					</div>
 				`);
-
-				// {
-				// 	let imgMenuToggle = document.createElement('img');
-				// 	imgMenuToggle.src = new URL(Potree.resourcePath + '/icons/menu_button.svg').href;
-				// 	imgMenuToggle.onclick = this.toggleSidebar;
-				// 	// imgMenuToggle.classList.add('potree_menu_toggle');
-
-				// 	potreeMap.append(imgMenuToggle);
-				// }
-
-				// {
-				// 	let imgMenuToggle = document.createElement('img');
-				// 	imgMenuToggle.src = new URL(Potree.resourcePath + '/icons/menu_button.svg').href;
-				// 	imgMenuToggle.onclick = this.toggleSidebar;
-				// 	// imgMenuToggle.classList.add('potree_menu_toggle');
-
-				// 	potreeMap.append(imgMenuToggle);
-				// }
-
-				// {
-				// 	let imgMenuToggle = document.createElement('img');
-				// 	imgMenuToggle.src = new URL(Potree.resourcePath + '/icons/menu_button.svg').href;
-				// 	imgMenuToggle.onclick = this.toggleSidebar;
-				// 	// imgMenuToggle.classList.add('potree_menu_toggle');
-
-				// 	potreeMap.append(imgMenuToggle);
-				// }
-
-				
 
 				$(domElement).append(potreeMap);
 			}
@@ -164,7 +131,6 @@ export class Viewer extends EventDispatcher{
 		this.pRenderer = null;
 
 		this.scene = null;
-		this.sceneVR = null;
 		this.overlay = null;
 		this.overlayCamera = null;
 
@@ -229,27 +195,14 @@ export class Viewer extends EventDispatcher{
 		
 
 		let scene = new Scene(this.renderer);
-		
-		{ // create VR scene
-			this.sceneVR = new THREE.Scene();
-
-			// let texture = new THREE.TextureLoader().load(`${Potree.resourcePath}/images/vr_controller_help.jpg`);
-
-			// let plane = new THREE.PlaneBufferGeometry(1, 1, 1, 1);
-			// let infoMaterial = new THREE.MeshBasicMaterial({map: texture});
-			// let infoNode = new THREE.Mesh(plane, infoMaterial);
-			// infoNode.position.set(-0.5, 1, 0);
-			// infoNode.scale.set(0.4, 0.3, 1);
-			// infoNode.lookAt(0, 1, 0)
-			// this.sceneVR.add(infoNode);
-
-			// window.infoNode = infoNode;
-		}
-
 		this.setScene(scene);
 
 		{
+			if (args.InputHandler) {
+				this.inputHandler = new args.InputHandler(this);
+			  } else {
 			this.inputHandler = new InputHandler(this);
+			  }
 			this.inputHandler.setScene(this.scene);
 
 			this.clippingTool = new ClippingTool(this);
@@ -313,10 +266,6 @@ export class Viewer extends EventDispatcher{
 		}
 
 		// start rendering!
-		//if(args.useDefaultRenderLoop === undefined || args.useDefaultRenderLoop === true){
-			//requestAnimationFrame(this.loop.bind(this));
-		//}
-
 		this.renderer.setAnimationLoop(this.loop.bind(this));
 
 		this.loadGUI = this.loadGUI.bind(this);
@@ -424,6 +373,16 @@ export class Viewer extends EventDispatcher{
 		}
 	};
 
+	registerScene (scene) {
+		this.scene.addExternalScene(scene);
+		this.inputHandler.registerInteractiveScene(scene);
+	}
+
+	unregisterScene (scene) {
+		this.scene.removeExternalScene(scene);
+		this.inputHandler.unregisterInteractiveScene(scene);
+	}
+
 	setControls(controls){
 		if (controls !== this.controls) {
 			if (this.controls) {
@@ -438,13 +397,7 @@ export class Viewer extends EventDispatcher{
 	}
 
 	getControls () {
-
-		if(this.renderer.xr.isPresenting){
-			return this.vrControls;
-		}else{
 			return this.controls;
-		}
-		
 	}
 
 	getMinNodeSize () {
@@ -1147,15 +1100,6 @@ export class Viewer extends EventDispatcher{
 			this.deviceControls.addEventListener('start', this.disableAnnotations.bind(this));
 			this.deviceControls.addEventListener('end', this.enableAnnotations.bind(this));
 		}
-
-		{ // create VR CONTROLS
-			this.vrControls = new VRControls(this);
-			this.vrControls.enabled = false;
-			this.vrControls.addEventListener('start', this.disableAnnotations.bind(this));
-			this.vrControls.addEventListener('end', this.enableAnnotations.bind(this));
-		}
-
-
 	};
 
 	toggleSidebar () {
@@ -1227,41 +1171,6 @@ export class Viewer extends EventDispatcher{
 
 			elButtons.append(imgMenuToggle);
 			elButtons.append(imgMapToggle);
-
-
-			VRButton.createButton(this.renderer).then(vrButton => {
-
-				if(vrButton == null){
-					console.log("VR not supported or active.");
-
-					return;
-				}
-
-				this.renderer.xr.enabled = true;
-
-				let element = vrButton.element;
-
-				element.style.position = "";
-				element.style.bottom = "";
-				element.style.left = "";
-				element.style.margin = "4px";
-				element.style.fontSize = "100%";
-				element.style.width = "2.5em";
-				element.style.height = "2.5em";
-				element.style.padding = "0";
-				element.style.textShadow = "black 2px 2px 2px";
-				element.style.display = "block";
-
-				elButtons.append(element);
-
-				vrButton.onStart(() => {
-					this.dispatchEvent({type: "vr_start"});
-				});
-
-				vrButton.onEnd(() => {
-					this.dispatchEvent({type: "vr_end"});
-				});
-			});
 
 			this.mapView = new MapView(this);
 			this.mapView.init();
@@ -1751,7 +1660,7 @@ export class Viewer extends EventDispatcher{
 				let far = -this.getBoundingBox().applyMatrix4(camera.matrixWorldInverse).min.z;
 
 				far = Math.max(far * 1.5, 10000);
-				near = Math.min(100.0, Math.max(0.01, near));
+				near = Math.min(0.1, Math.max(0.01, near));
 				near = Math.min(near, closestImage);
 				far = Math.max(far, near + 10000);
 
@@ -1916,166 +1825,6 @@ export class Viewer extends EventDispatcher{
 				return this.potreeRenderer;
 			}
 		}
-	}
-
-	renderVR(){
-
-		let renderer = this.renderer;
-
-		renderer.setClearColor(0x550000, 0);
-		renderer.clear();
-
-		let xr = renderer.xr;
-		let dbg = new THREE.PerspectiveCamera();
-		let xrCameras = xr.getCamera(dbg);
-
-		if(xrCameras.cameras.length !== 2){
-			return;
-		}
-
-		let makeCam = this.vrControls.getCamera.bind(this.vrControls);
-
-		{ // clear framebuffer
-			if(viewer.background === "skybox"){
-				renderer.setClearColor(0xff0000, 1);
-			}else if(viewer.background === "gradient"){
-				renderer.setClearColor(0x112233, 1);
-			}else if(viewer.background === "black"){
-				renderer.setClearColor(0x000000, 1);
-			}else if(viewer.background === "white"){
-				renderer.setClearColor(0xFFFFFF, 1);
-			}else{
-				renderer.setClearColor(0x000000, 0);
-			}
-
-			renderer.clear();
-		}
-
-		// render background
-		if(this.background === "skybox"){
-			let {skybox} = this;
-
-			let cam = makeCam();
-			skybox.camera.rotation.copy(cam.rotation);
-			skybox.camera.fov = cam.fov;
-			skybox.camera.aspect = cam.aspect;
-			
-			// let dbg = new THREE.Object3D();
-			let dbg = skybox.parent;
-			// dbg.up.set(0, 0, 1);
-			dbg.rotation.x = Math.PI / 2;
-
-			// skybox.camera.parent = dbg;
-			// dbg.children.push(skybox.camera);
-
-			dbg.updateMatrix();
-			dbg.updateMatrixWorld();
-
-			skybox.camera.updateMatrix();
-			skybox.camera.updateMatrixWorld();
-			skybox.camera.updateProjectionMatrix();
-
-			renderer.render(skybox.scene, skybox.camera);
-			// renderer.render(skybox.scene, cam);
-		}else if(this.background === "gradient"){
-			// renderer.render(this.scene.sceneBG, this.scene.cameraBG);
-		}
-
-		this.renderer.xr.getSession().updateRenderState({
-			depthNear: 0.1,
-			depthFar: 10000
-		});
-		
-		let cam = null;
-		let view = null;
-
-		{ // render world scene
-			cam = makeCam();
-			cam.position.z -= 0.8 * cam.scale.x;
-			cam.parent = null;
-			// cam.near = 0.05;
-			cam.near = viewer.scene.getActiveCamera().near;
-			cam.far = viewer.scene.getActiveCamera().far;
-			cam.updateMatrix();
-			cam.updateMatrixWorld();
-
-			this.scene.scene.updateMatrix();
-			this.scene.scene.updateMatrixWorld();
-			this.scene.scene.matrixAutoUpdate = false;
-
-			let camWorld = cam.matrixWorld.clone();
-			view = camWorld.clone().invert();
-			this.scene.scene.matrix.copy(view);
-			this.scene.scene.matrixWorld.copy(view);
-
-			cam.matrix.identity();
-			cam.matrixWorld.identity();
-			cam.matrixWorldInverse.identity();
-
-			renderer.render(this.scene.scene, cam);
-
-			this.scene.scene.matrixWorld.identity();
-
-		}
-		
-		for(let pointcloud of this.scene.pointclouds){
-
-			let viewport = xrCameras.cameras[0].viewport;
-
-			pointcloud.material.useEDL = false;
-			pointcloud.screenHeight = viewport.height;
-			pointcloud.screenWidth = viewport.width;
-
-			// automatically switch to paraboloids because they cause far less flickering in VR, 
-			// when point sizes are larger than around 2 pixels
-			// if(Features.SHADER_INTERPOLATION.isSupported()){
-			// 	pointcloud.material.shape = Potree.PointShape.PARABOLOID;
-			// }
-		}
-		
-		// render point clouds
-		for(let xrCamera of xrCameras.cameras){
-
-			let v = xrCamera.viewport;
-			renderer.setViewport(v.x, v.y, v.width, v.height);
-
-			// xrCamera.fov = 90;
-
-			{ // estimate VR fov
-				let proj = xrCamera.projectionMatrix;
-				let inv = proj.clone().invert();
-
-				let p1 = new THREE.Vector4(0, 1, -1, 1).applyMatrix4(inv);
-				let rad = p1.y
-				let fov = 180 * (rad / Math.PI);
-
-				xrCamera.fov = fov;
-			}
-
-			for(let pointcloud of this.scene.pointclouds){
-				const {material} = pointcloud;
-				material.useEDL = false;
-			}
-
-			let vrWorld = view.clone().invert();
-			vrWorld.multiply(xrCamera.matrixWorld);
-			let vrView = vrWorld.clone().invert();
-
-			this.pRenderer.render(this.scene.scenePointCloud, xrCamera, null, {
-				viewOverride: vrView,
-			});
-
-		}
-
-		{ // render VR scene
-			let cam = makeCam();
-			cam.parent = null;
-
-			renderer.render(this.sceneVR, cam);
-		}
-
-		renderer.resetState();
-
 	}
 
 	renderDefault(){
