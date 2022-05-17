@@ -4,8 +4,8 @@ export class View{
 	constructor () {
 		this.position = new THREE.Vector3(0, 0, 0);
 
-		this.yaw = Math.PI / 4;
-		this._pitch = -Math.PI / 4;
+		this.yaw = 0;
+		this._pitch = -Math.PI / 2;
 		this.radius = 1;
 
 		this.maxPitch = Math.PI / 2;
