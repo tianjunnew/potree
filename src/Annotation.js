@@ -5,6 +5,7 @@ import {Action} from "./Actions.js";
 import {Utils} from "./utils.js";
 import {EventDispatcher} from "./EventDispatcher.js";
 import $ from 'jquery';
+import TWEEN from "../libs/tween/Tween.js";
 
 export class Annotation extends EventDispatcher {
 	constructor (args = {}) {

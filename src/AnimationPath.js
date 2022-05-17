@@ -1,8 +1,9 @@
 
 import * as THREE from "../libs/three.js/build/three.module.js";
+import TWEEN from "../libs/tween/Tween.js";
 
 export class PathAnimation{
-	
+
 	constructor(path, start, end, speed, callback){
 			this.path = path;
 			this.length = this.path.spline.getLength();
@@ -19,7 +20,7 @@ export class PathAnimation{
 			this.tween.stop();
 			this.tween = null;
 		}
-	
+
 		let tStart;
 		if(resume){
 			tStart = this.t;
@@ -28,7 +29,7 @@ export class PathAnimation{
 		}
 		let tEnd = this.endPoint / this.length;
 		let animationDuration = (tEnd - tStart) * this.length * 1000 / this.speed;
-	
+
 		let progress = {t: tStart};
 		this.tween = new TWEEN.Tween(progress).to({t: tEnd}, animationDuration);
 		this.tween.easing(TWEEN.Easing.Linear.None);
@@ -60,7 +61,7 @@ export class PathAnimation{
 		if(!this.tween){
 			return;
 		}
-		
+
 		this.tween.stop();
 		TWEEN.remove(this.tween);
 		this.tween = null;

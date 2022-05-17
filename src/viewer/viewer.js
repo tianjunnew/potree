@@ -33,6 +33,7 @@ import { ClassificationScheme } from "../materials/ClassificationScheme.js";
 
 import JSON5 from "../../libs/json5-2.1.3/json5.mjs";
 import $ from 'jquery';
+import TWEEN from "../../libs/tween/Tween.js";
 
 export class Viewer extends EventDispatcher{
 

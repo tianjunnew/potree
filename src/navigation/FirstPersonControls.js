@@ -17,6 +17,7 @@ import * as THREE from "../../libs/three.js/build/three.module.js";
 import {MOUSE} from "../defines.js";
 import {Utils} from "../utils.js";
 import {EventDispatcher} from "../EventDispatcher.js";
+import TWEEN from "../../libs/tween/Tween.js";
 
 
 export class FirstPersonControls extends EventDispatcher {
@@ -114,10 +115,10 @@ export class FirstPersonControls extends EventDispatcher {
 		this.pitchDelta = 0;
 		this.translationDelta.set(0, 0, 0);
 	}
-	
+
 	zoomToLocation(mouse){
 		let camera = this.scene.getActiveCamera();
-		
+
 		let I = Utils.getMousePointCloudIntersection(
 			mouse,
 			camera,

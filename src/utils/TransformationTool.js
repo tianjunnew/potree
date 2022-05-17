@@ -1,6 +1,7 @@
 
 import * as THREE from "../../libs/three.js/build/three.module.js";
 import {Utils} from "../utils.js";
+import TWEEN from "../../libs/tween/Tween.js";
 
 export class TransformationTool {
 	constructor(viewer) {
@@ -30,7 +31,7 @@ export class TransformationTool {
 		let red = 0xE73100;
 		let green = 0x44A24A;
 		let blue = 0x2669E7;
-		
+
 		this.activeHandle = null;
 		this.scaleHandles = {
 			"scale.x+": {name: "scale.x+", node: new THREE.Object3D(), color: red, alignment: [+1, +0, +0]},
@@ -100,7 +101,7 @@ export class TransformationTool {
 		this.frame = new THREE.LineSegments(boxFrameGeometry, new THREE.LineBasicMaterial({color: 0xffff00}));
 		this.scene.add(this.frame);
 
-		
+
 	}
 
 	initializeScaleHandles(){
@@ -120,7 +121,7 @@ export class TransformationTool {
 				});
 
 			let outlineMaterial = new THREE.MeshBasicMaterial({
-				color: 0x000000, 
+				color: 0x000000,
 				side: THREE.BackSide,
 				opacity: 0.4,
 				transparent: true});
@@ -134,7 +135,7 @@ export class TransformationTool {
 			sphere.scale.set(1.3, 1.3, 1.3);
 			sphere.name = `${handleName}.handle`;
 			node.add(sphere);
-			
+
 			let outline = new THREE.Mesh(sgSphere, outlineMaterial);
 			outline.scale.set(1.4, 1.4, 1.4);
 			outline.name = `${handleName}.outline`;
@@ -220,7 +221,7 @@ export class TransformationTool {
 			});
 
 			//let outlineMaterial = new THREE.MeshBasicMaterial({
-			//	color: 0x000000, 
+			//	color: 0x000000,
 			//	side: THREE.BackSide,
 			//	opacity: 0,
 			//	transparent: true});
@@ -237,7 +238,7 @@ export class TransformationTool {
 			box.visible = false;
 			node.add(box);
 			//handle.focusNode = box;
-			
+
 			//let outline = new THREE.Mesh(sgPlane, outlineMaterial);
 			//outline.scale.set(1.4, 1.4, 1.4);
 			//outline.name = `${handleName}.outline`;
@@ -312,7 +313,7 @@ export class TransformationTool {
 				transparent: true});
 
 			let outlineMaterial = new THREE.MeshBasicMaterial({
-				color: 0x000000, 
+				color: 0x000000,
 				side: THREE.BackSide,
 				opacity: 0.4,
 				transparent: true});
@@ -379,7 +380,7 @@ export class TransformationTool {
 				transparent: true});
 
 			let outlineMaterial = new THREE.MeshBasicMaterial({
-				color: 0x000000, 
+				color: 0x000000,
 				side: THREE.BackSide,
 				opacity: 0.4,
 				transparent: true});
@@ -428,7 +429,7 @@ export class TransformationTool {
 			//	//let a = this.viewer.scene.getActiveCamera().getWorldDirection(new THREE.Vector3()).dot(pickVolume.getWorldDirection(new THREE.Vector3()));
 			//	console.log(pickVolume.getWorldDirection(new THREE.Vector3()));
 			//});
-			
+
 			pickVolume.addEventListener("drag", (e) => {this.dragRotationHandle(e)});
 			pickVolume.addEventListener("drop", (e) => {this.dropRotationHandle(e)});
 		}
@@ -474,7 +475,7 @@ export class TransformationTool {
 		let mouse = drag.end;
 		let domElement = this.viewer.renderer.domElement;
 		let ray = Utils.mouseToRay(mouse, camera, domElement.clientWidth, domElement.clientHeight);
-		
+
 		let I = ray.intersectPlane(drag.dragPlane, new THREE.Vector3());
 
 		if (I) {
@@ -514,7 +515,7 @@ export class TransformationTool {
 		let drag = e.drag;
 		let handle = this.activeHandle;
 		let camera = this.viewer.scene.getActiveCamera();
-			
+
 		if(!drag.intersectionStart && handle){
 			drag.intersectionStart = drag.location;
 			drag.objectStart = drag.object.getWorldPosition(new THREE.Vector3());
@@ -721,7 +722,7 @@ export class TransformationTool {
 			}
 		}
 
-		
+
 
 
 
@@ -729,7 +730,7 @@ export class TransformationTool {
 			handle.node.setOpacity(1.0);
 		}
 
-		
+
 	}
 
 	update () {
@@ -851,13 +852,13 @@ export class TransformationTool {
 					}
 				}
 
-				// 
+				//
 				for(let handleName of Object.keys(this.scaleHandles)){
 					let handle = this.handles[handleName];
 					let node = handle.node;
 					let alignment = handle.alignment;
 
-					
+
 
 				}
 			}
@@ -865,7 +866,7 @@ export class TransformationTool {
 		}else{
 			this.scene.visible = false;
 		}
-		
+
 	}
 
 };

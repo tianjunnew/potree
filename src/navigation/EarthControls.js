@@ -3,6 +3,7 @@ import * as THREE from "../../libs/three.js/build/three.module.js";
 import {MOUSE} from "../defines.js";
 import {Utils} from "../utils.js";
 import {EventDispatcher} from "../EventDispatcher.js";
+import TWEEN from "../../libs/tween/Tween.js";
 
 export class EarthControls extends EventDispatcher {
 	constructor (viewer) {
@@ -117,10 +118,10 @@ export class EarthControls extends EventDispatcher {
 
 		let onMouseDown = e => {
 			let I = Utils.getMousePointCloudIntersection(
-				e.mouse, 
-				this.scene.getActiveCamera(), 
-				this.viewer, 
-				this.scene.pointclouds, 
+				e.mouse,
+				this.scene.getActiveCamera(),
+				this.viewer,
+				this.scene.pointclouds,
 				{pickClipped: false});
 
 			if (I) {
@@ -165,10 +166,10 @@ export class EarthControls extends EventDispatcher {
 		this.wheelDelta = 0;
 		this.zoomDelta.set(0, 0, 0);
 	}
-	
+
 	zoomToLocation(mouse){
 		let camera = this.scene.getActiveCamera();
-		
+
 		let I = Utils.getMousePointCloudIntersection(
 			mouse,
 			camera,
@@ -234,13 +235,13 @@ export class EarthControls extends EventDispatcher {
 		let fade = Math.pow(0.5, this.fadeFactor * delta);
 		let progression = 1 - fade;
 		let camera = this.scene.getActiveCamera();
-		
+
 		// compute zoom
 		if (this.wheelDelta !== 0) {
 			let I = Utils.getMousePointCloudIntersection(
-				this.viewer.inputHandler.mouse, 
-				this.scene.getActiveCamera(), 
-				this.viewer, 
+				this.viewer.inputHandler.mouse,
+				this.scene.getActiveCamera(),
+				this.viewer,
 				this.scene.pointclouds);
 
 			if (I) {

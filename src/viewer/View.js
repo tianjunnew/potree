@@ -1,4 +1,5 @@
 import * as THREE from "../../libs/three.js/build/three.module.js";
+import TWEEN from "../../libs/tween/Tween.js";
 
 export class View{
 	constructor () {
@@ -52,7 +53,7 @@ export class View{
 			this.yaw = yaw;
 			this.pitch = pitch;
 		}
-		
+
 	}
 
 	lookAt(t){
@@ -137,7 +138,7 @@ export class View{
 		}else if(target.x != null){
 			endTarget = target.clone();
 		}
-		
+
 		const startPosition = this.position.clone();
 		const startTarget = this.getPivot();
 
