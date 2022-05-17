@@ -779,6 +779,16 @@ export class PointCloudOctree extends PointCloudTree {
 			};
 		};
 
+		let hits = []
+
+		for(var i = 0; i*256 < nodes.length; i++ ){
+			if( (i+1)*256 < nodes.length){
+				var nodes_copy = nodes.slice(i*256, (i+1)*256);
+			}
+			else{
+				var nodes_copy = nodes.slice(i*256);
+			}
+
 		let pickState = this.pickState;
 		let pickMaterial = pickState.material;
 
@@ -813,7 +823,7 @@ export class PointCloudOctree extends PointCloudTree {
 				pickMaterial.clipBoxes = [];
 			}
 
-			this.updateMaterial(pickMaterial, nodes, camera, renderer);
+			this.updateMaterial(pickMaterial, nodes_copy, camera, renderer);
 		}
 
 		pickState.renderTarget.setSize(width, height);
@@ -840,7 +850,7 @@ export class PointCloudOctree extends PointCloudTree {
 			let tmp = this.material;
 			this.material = pickMaterial;
 
-			pRenderer.renderOctree(this, nodes, camera, pickState.renderTarget);
+			pRenderer.renderOctree(this, nodes_copy, camera, pickState.renderTarget);
 
 			this.material = tmp;
 		}
@@ -867,7 +877,7 @@ export class PointCloudOctree extends PointCloudTree {
 
 		// find closest hit inside pixelWindow boundaries
 		let min = Number.MAX_VALUE;
-		let hits = [];
+
 		for (let u = 0; u < pickWindowSize; u++) {
 			for (let v = 0; v < pickWindowSize; v++) {
 				let offset = (u + v * pickWindowSize);
@@ -883,56 +893,13 @@ export class PointCloudOctree extends PointCloudTree {
 						pcIndex: pcIndex,
 						distanceToCenter: distance
 					};
-
-					if(params.all){
-						hits.push(hit);
-					}else{
-						if(hits.length > 0){
-							if(distance < hits[0].distanceToCenter){
-								hits[0] = hit;
-							}
-						}else{
-							hits.push(hit);
-						}
-					}
-
-
-				}
-			}
-		}
-
-		
-		// { // DEBUG: show panel with pick image
-		// 	let img = Utils.pixelsArrayToImage(buffer, w, h);
-		// 	let screenshot = img.src;
-		
-		// 	if(!this.debugDIV){
-		// 		this.debugDIV = $(`
-		// 			<div id="pickDebug"
-		// 			style="position: absolute;
-		// 			right: 400px; width: 300px;
-		// 			bottom: 44px; width: 300px;
-		// 			z-index: 1000;
-		// 			"></div>`);
-		// 		$(document.body).append(this.debugDIV);
-		// 	}
-		
-		// 	this.debugDIV.empty();
-		// 	this.debugDIV.append($(`<img src="${screenshot}"
-		// 		style="transform: scaleY(-1); width: 300px"/>`));
-		// 	//$(this.debugWindow.document).append($(`<img src="${screenshot}"/>`));
-		// 	//this.debugWindow.document.write('<img src="'+screenshot+'"/>');
-		// }
-
-
-		for(let hit of hits){
 			let point = {};
 
-			if (!nodes[hit.pcIndex]) {
+			if (!nodes_copy[hit.pcIndex]) {
 				return null;
 			}
 
-			let node = nodes[hit.pcIndex];
+			let node = nodes_copy[hit.pcIndex];
 			let pc = node.sceneNode;
 			let geometry = node.geometryNode.geometry;
 
@@ -960,24 +927,27 @@ export class PointCloudOctree extends PointCloudTree {
 					}
 
 					point[attributeName] = values;
-
-					//debugger;
-					//if (values.itemSize === 1) {
-					//	point[attribute.name] = values.array[hit.pIndex];
-					//} else {
-					//	let value = [];
-					//	for (let j = 0; j < values.itemSize; j++) {
-					//		value.push(values.array[values.itemSize * hit.pIndex + j]);
-					//	}
-					//	point[attribute.name] = value;
-					//}
 				}
 
 			}
 
 			hit.point = point;
-		}
 
+						if(params.all){
+							hits.push(hit);
+						}else {
+							if(hits.length > 0){
+								if(distance < hits[0].distanceToCenter){
+									hits[0] = hit;
+		}
+							}else {
+								hits.push(hit);
+							}
+						}
+					}
+				}
+			}
+		}
 		performance.mark("pick-end");
 		performance.measure("pick", "pick-start", "pick-end");
 
