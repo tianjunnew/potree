@@ -1,20 +1,21 @@
 {
-	"workbench.editor.enablePreview": false,
-	"files.associations": {
-		"*.vs": "cpp",
-		"*.fs": "cpp"
-	},
-	"files.trimTrailingWhitespace": false,
-	"editor.fontSize": 28,
-	"editor.autoIndent": false,
-	"editor.detectIndentation": false,
-	"editor.insertSpaces": false,
-	"editor.minimap.enabled": false,
-	"editor.autoClosingBrackets": false,
-	"editor.formatOnType": false,
-	"editor.acceptSuggestionOnEnter": "off",
-	"editor.acceptSuggestionOnCommitCharacter": false,
-	"editor.mouseWheelZoom": true,
-	"editor.renderWhitespace": "all",
-	"workbench.tree.indent": 30,
+  "stylelint.autoFix": true,
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false,
+  "editor.fontFamily": "monospace",
+  "editor.rulers": [80, 120],
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "git.autofetch": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "eslint.enable": false,
+  "eslint.options": {
+    "extensions": [".ts", ".tsx"]
+  },
+  "eslint.validate": ["javascript", "typescript", "typescriptreact"],
+  "javascript.format.enable": true
 }
