@@ -91,7 +91,11 @@ export class PotreeRenderer {
 		renderer.render(viewer.controls.sceneControls, camera);
 		
 		renderer.clearDepth();
-		
+
+		for (let scene of viewer.scene.externalScenes) {
+			viewer.renderer.render(scene, camera);
+		}
+
 		viewer.transformationTool.update();
 		
 		viewer.dispatchEvent({type: "render.pass.perspective_overlay",viewer: viewer});

@@ -328,6 +328,10 @@ export class EDLRenderer{
 
 		viewer.renderer.clearDepth();
 
+		for (let scene of viewer.scene.externalScenes) {
+			viewer.renderer.render(scene, camera);
+		}
+
 		viewer.transformationTool.update();
 
 		viewer.dispatchEvent({type: "render.pass.perspective_overlay",viewer: viewer});
