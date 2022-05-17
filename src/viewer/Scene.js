@@ -17,6 +17,7 @@ export class Scene extends EventDispatcher{
 		this.scene = new THREE.Scene();
 		this.sceneBG = new THREE.Scene();
 		this.scenePointCloud = new THREE.Scene();
+		this.externalScenes = [];
 
 		this.cameraP = new THREE.PerspectiveCamera(this.fov, 1, 0.1, 1000*1000);
 		this.cameraO = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 1000*1000);
@@ -150,19 +151,6 @@ export class Scene extends EventDispatcher{
 		});
 	};
 
-	removeOrientedImages(images){
-		let index = this.orientedImages.indexOf(images);
-		if (index > -1) {
-			this.orientedImages.splice(index, 1);
-
-			this.dispatchEvent({
-				'type': 'oriented_images_removed',
-				'scene': this,
-				'images': images
-			});
-		}
-	};
-
 	add360Images(images){
 		this.images360.push(images);
 		this.scene.add(images.node);
@@ -174,19 +162,6 @@ export class Scene extends EventDispatcher{
 		});
 	}
 
-	remove360Images(images){
-		let index = this.images360.indexOf(images);
-		if (index > -1) {
-			this.images360.splice(index, 1);
-
-			this.dispatchEvent({
-				'type': '360_images_removed',
-				'scene': this,
-				'images': images
-			});
-		}
-	}
-
 	addGeopackage(geopackage){
 		this.geopackages.push(geopackage);
 		this.scene.add(geopackage.node);
@@ -196,19 +171,6 @@ export class Scene extends EventDispatcher{
 			'scene': this,
 			'geopackage': geopackage
 		});
-	};
-
-	removeGeopackage(geopackage){
-		let index = this.geopackages.indexOf(geopackage);
-		if (index > -1) {
-			this.geopackages.splice(index, 1);
-
-			this.dispatchEvent({
-				'type': 'geopackage_removed',
-				'scene': this,
-				'geopackage': geopackage
-			});
-		}
 	};
 
 	removeVolume (volume) {
@@ -231,19 +193,6 @@ export class Scene extends EventDispatcher{
 			'scene': this,
 			'animation': animation
 		});
-	};
-
-	removeCameraAnimation(animation){
-		let index = this.cameraAnimations.indexOf(volume);
-		if (index > -1) {
-			this.cameraAnimations.splice(index, 1);
-
-			this.dispatchEvent({
-				'type': 'camera_animation_removed',
-				'scene': this,
-				'animation': animation
-			});
-		}
 	};
 
 	addPolygonClipVolume(volume){
@@ -311,6 +260,37 @@ export class Scene extends EventDispatcher{
 		}
 	}
 
+	addLights() {
+		let light;
+		light = new THREE.DirectionalLight(0xffffff);
+		light.position.set(10, 10, 1);
+		light.target.position.set(0, 0, 0);
+		scene.add(light);
+
+		light = new THREE.DirectionalLight(0xffffff);
+		light.position.set(-10, 10, 1);
+		light.target.position.set(0, 0, 0);
+		scene.add(light);
+
+		light = new THREE.DirectionalLight(0xffffff);
+		light.position.set(0, -10, 20);
+		light.target.position.set(0, 0, 0);
+		scene.add(light);
+	}
+
+	addExternalScene (scene) {
+		this.externalScenes.push(scene);
+		this.addLights();
+	}
+
+	removeExternalScene (scene) {
+		let index = this.externalScenes.indexOf(scene);
+		if (index > -1) {
+		  this.externalScenes.splice(index, 1);
+		}
+		// Cleanup of the scene should be done outside
+	}
+
 	removeAllMeasurements () {
 		while (this.measurements.length > 0) {
 			this.removeMeasurement(this.measurements[0]);
@@ -346,8 +326,6 @@ export class Scene extends EventDispatcher{
 			return this.cameraP;
 		}else if(this.cameraMode === CameraMode.ORTHOGRAPHIC){
 			return this.cameraO;
-		}else if(this.cameraMode === CameraMode.VR){
-			return this.cameraVR;
 		}
 
 		return null;
@@ -391,28 +369,7 @@ export class Scene extends EventDispatcher{
 			this.sceneBG.add(bg);
 		}
 
-		// { // lights
-		// 	{
-		// 		let light = new THREE.DirectionalLight(0xffffff);
-		// 		light.position.set(10, 10, 1);
-		// 		light.target.position.set(0, 0, 0);
-		// 		this.scene.add(light);
-		// 	}
-
-		// 	{
-		// 		let light = new THREE.DirectionalLight(0xffffff);
-		// 		light.position.set(-10, 10, 1);
-		// 		light.target.position.set(0, 0, 0);
-		// 		this.scene.add(light);
-		// 	}
-
-		// 	{
-		// 		let light = new THREE.DirectionalLight(0xffffff);
-		// 		light.position.set(0, -10, 20);
-		// 		light.target.position.set(0, 0, 0);
-		// 		this.scene.add(light);
-		// 	}
-		// }
+		this.addLights();
 	}
 	
 	addAnnotation(position, args = {}){		
