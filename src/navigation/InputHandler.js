@@ -210,6 +210,12 @@ export class InputHandler extends EventDispatcher {
 
 		delete this.pressedKeys[e.keyCode];
 
+		this.dispatchEvent({
+			type: 'keyup',
+			keyCode: e.keyCode,
+			event: e
+		  });
+
 		e.preventDefault();
 	}
 
@@ -260,7 +266,8 @@ export class InputHandler extends EventDispatcher {
 				inputListener.dispatchEvent({
 					type: 'mousedown',
 					viewer: this.viewer,
-					mouse: this.mouse
+					mouse: this.mouse,
+					which: e.which
 				});
 			}
 		}else{
@@ -269,7 +276,8 @@ export class InputHandler extends EventDispatcher {
 				object.dispatchEvent({
 					type: 'mousedown',
 					viewer: this.viewer,
-					consume: consume
+					consume: consume,
+					which: e.which
 				});
 
 				if(consumed){
@@ -313,7 +321,8 @@ export class InputHandler extends EventDispatcher {
 					type: 'mouseup',
 					viewer: this.viewer,
 					mouse: this.mouse,
-					consume: consume
+					consume: consume,
+					which: e.which
 				});
 
 				if(consumed){
@@ -328,7 +337,8 @@ export class InputHandler extends EventDispatcher {
 				hovered.dispatchEvent({
 					type: 'mouseup',
 					viewer: this.viewer,
-					consume: consume
+					consume: consume,
+					which: e.which
 				});
 			}
 		}
@@ -339,15 +349,16 @@ export class InputHandler extends EventDispatcher {
 				this.drag.object.dispatchEvent({
 					type: 'drop',
 					drag: this.drag,
-					viewer: this.viewer
-
+					viewer: this.viewer,
+					which: e.which
 				});
 			} else {
 				for (let inputListener of this.getSortedListeners()) {
 					inputListener.dispatchEvent({
 						type: 'drop',
 						drag: this.drag,
-						viewer: this.viewer
+						viewer: this.viewer,
+						which: e.which
 					});
 				}
 			}
@@ -360,6 +371,7 @@ export class InputHandler extends EventDispatcher {
 					type: 'click',
 					viewer: this.viewer,
 					consume: consume,
+					which: e.which
 				});
 			}
 
@@ -474,14 +486,6 @@ export class InputHandler extends EventDispatcher {
 			}
 
 		}
-		
-		// for (let inputListener of this.getSortedListeners()) {
-		// 	inputListener.dispatchEvent({
-		// 		type: 'mousemove',
-		// 		object: null
-		// 	});
-		// }
-		
 
 		this.hoveredElements = hoveredElements;
 	}
