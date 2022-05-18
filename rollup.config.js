@@ -5,7 +5,7 @@ export default [
 		input: 'src/Potree.js',
 		output: {
 			file: 'build/potree/potree.js',
-			format: 'es',
+			format: 'umd',
 			name: 'Potree',
 			sourcemap: true,
 		},
