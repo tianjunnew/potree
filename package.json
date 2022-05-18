@@ -1,7 +1,6 @@
 {
-  "name": "potree",
-  "private": true,
-  "version": "1.7.0",
+  "name": "@tusen/fe-potree",
+  "version": "0.2.0",
   "description": "WebGL point cloud viewer",
   "keywords": [
     "point",
@@ -15,7 +14,8 @@
     "browser",
     "tool"
   ],
-  "main": "./build/potree/potree.js",
+  "main": "./dist/index.js",
+  "files": ["dist"],
   "scripts": {
     "start": "gulp watch",
     "build": "gulp build pack"
@@ -34,6 +34,6 @@
     "rollup": "^2.72.1",
     "through": "~2.3.4"
   },
-  "author": "Markus Schütz",
+  "author": "tusen",
   "license": "BSD-2-CLAUSE"
 }

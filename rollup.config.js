@@ -7,7 +7,7 @@ export default [
 			file: 'build/potree/potree.js',
 			format: 'umd',
 			name: 'Potree',
-			sourcemap: true,
+			sourcemap: false,
 		},
 		external: ['jquery'],
 		plugins: [
